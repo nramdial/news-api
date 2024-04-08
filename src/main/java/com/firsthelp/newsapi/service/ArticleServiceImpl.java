@@ -4,6 +4,7 @@ import com.firsthelp.newsapi.dto.ArticleResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,8 +20,9 @@ public class ArticleServiceImpl implements ArticleService {
   @Autowired private WebClient webClient;
 
   @Override
-  public ArticleResponseDto searchArticles(Integer limit, String keywords, String filterBy) {
-    log.info("Searching for articles using keywords {}, filter {}, and limit {}", keywords, filterBy, limit);
+  @Cacheable(value = "articles", key = "{ #keyword, #limit}")
+  public ArticleResponseDto searchArticles(Integer limit, String keyword, String filterBy) {
+    log.info("Searching for articles using keywords {}, filter {}, and limit {}", keyword, filterBy, limit);
 
     ArticleResponseDto response =
         webClient
@@ -30,7 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
                     uriBuilder
                         .path("/search")
                         .queryParam("max", limit)
-                        .queryParam("q", keywords)
+                        .queryParam("q", keyword)
                         .queryParamIfPresent("in", Optional.of(String.join(",", filterBy)))
                         .queryParam("apikey", API_KEY)
                         .build())
