@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -17,8 +19,8 @@ public class ArticleServiceImpl implements ArticleService {
   @Autowired private WebClient webClient;
 
   @Override
-  public ArticleResponseDto searchArticles(Integer limit, String keywords) {
-    log.info("Searching for articles using keywords {} and limit {}", keywords, limit);
+  public ArticleResponseDto searchArticles(Integer limit, String keywords, String filterBy) {
+    log.info("Searching for articles using keywords {}, filter {}, and limit {}", keywords, filterBy, limit);
 
     ArticleResponseDto response =
         webClient
@@ -29,6 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
                         .path("/search")
                         .queryParam("max", limit)
                         .queryParam("q", keywords)
+                        .queryParamIfPresent("in", Optional.of(String.join(",", filterBy)))
                         .queryParam("apikey", API_KEY)
                         .build())
             .retrieve()
@@ -36,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
             .block();
 
     assert response != null;
-    log.info("Found {} of articles", response.getTotalArticles());
+    log.info("Found {} article(s)", response.getTotalArticles());
     return response;
   }
 }
