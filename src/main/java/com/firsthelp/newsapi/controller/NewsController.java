@@ -35,12 +35,19 @@ public interface NewsController {
   ResponseEntity<ArticleResponseDto> getArticles(
       @Valid
           @RequestParam(required = false, defaultValue = "10")
-          @Parameter(description = "Number of articles to return")
+          @Parameter(description = "Number of articles to return", example = "10")
           @Min(1)
           @Max(100)
           Integer limit,
-      @RequestParam @Parameter(description = "Required keyword to search by") String keyword,
+      @RequestParam
+          @Parameter(
+              description = "Required keyword to search by",
+              required = true,
+              example = "UConn")
+          String keyword,
       @RequestParam(name = "filter", required = false, defaultValue = "")
-          @Parameter(description = "Comma-separated filter categories (e.g. \"title,content\", \"content\" ")
+          @Parameter(
+              description =
+                  "Comma-separated filter categories (e.g. \"title,content\", \"content\"")
           List<SearchFilter> filter);
 }
