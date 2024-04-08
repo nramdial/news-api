@@ -1,6 +1,6 @@
 package com.firsthelp.newsapi.controller;
 
-import com.firsthelp.newsapi.SearchFilter;
+import com.firsthelp.newsapi.util.SearchFilter;
 import com.firsthelp.newsapi.dto.ArticleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

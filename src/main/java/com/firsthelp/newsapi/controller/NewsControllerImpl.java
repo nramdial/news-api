@@ -1,6 +1,6 @@
 package com.firsthelp.newsapi.controller;
 
-import com.firsthelp.newsapi.SearchFilter;
+import com.firsthelp.newsapi.util.SearchFilter;
 import com.firsthelp.newsapi.dto.ArticleResponseDto;
 import com.firsthelp.newsapi.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;

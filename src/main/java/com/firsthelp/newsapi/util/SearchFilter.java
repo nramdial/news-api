@@ -1,4 +1,4 @@
-package com.firsthelp.newsapi;
+package com.firsthelp.newsapi.util;
 
 public enum SearchFilter {
     DESCRIPTION,
