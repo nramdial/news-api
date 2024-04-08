@@ -6,12 +6,13 @@ import com.firsthelp.newsapi.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Validated
 @RestController
 public class NewsControllerImpl implements NewsController {
 
@@ -20,9 +21,7 @@ public class NewsControllerImpl implements NewsController {
   @Override
   @GetMapping("/articles")
   public ResponseEntity<ArticleResponseDto> getArticles(
-      @RequestParam(required = false, defaultValue = "10") Integer limit,
-      @RequestParam String keyword,
-      @RequestParam(name = "filter", required = false, defaultValue = "") List<SearchFilter> filter) {
+      Integer limit, String keyword, List<SearchFilter> filter) {
     String criteriaString = filter.toString();
     ArticleResponseDto response = articleService.searchArticles(limit, keyword, criteriaString);
     return new ResponseEntity<>(response, HttpStatus.OK);
